@@ -1,1 +1,1 @@
-web: python test/test_bezrealitky.py
+web: pytest test/test_bezrealitky.py
