@@ -1,0 +1,1 @@
+web: python test/test_bezrealitky.py
