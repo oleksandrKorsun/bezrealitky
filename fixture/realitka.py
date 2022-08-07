@@ -8,26 +8,8 @@ class RealitkaHelper:
     telegramBot = TelegramBotHelper()
     db_id = DbHelper("FLATS", "list_of_sent_ids")
 
-    FIRST_CHECK_BOX = "(//span[@class='custom-control-indicator'])[3]"
-    SECOND_CHECK_BOX = "(//span[@class='custom-control-indicator'])[4]"
-    CHECK_BOX_BEFORE_SEND_LETTER = "(//span[@class='custom-control-indicator'])[9]"
-    DALSI_INZERATY = '.p-lg-20 .btn.btn-secondary.btn-icon.btn-shadow.btn-sm'
-    SEND_MESSAGE_TO_OWNER = "(//a[@class='send-message btn btn-success btn-icon btn-icon-lg js-send-message'])[2]"
-    SEND_MESSAGE_BUTTON = '.send-message-submit.btn.btn-primary.btn-shadow'
-    LOG_IN_BUTTON = '.btn.btn-primary.btn-lg'
-    MY_ACCOUNT_ICON = '.m-profile__account'
-    LOG_OUT_BUTTON = '.m-profile__sub__link--logout.nav-link.m-profile__sub__link'
-    MESSAGE_TO_OWNER_TEXT_AREA = '#send-message > div > div > div.modal-body > div > textarea'
-    VPORADKU_BUTTON = "//a[text()='V pořádku']"
-    CLOSE_MODAL_AFTER_SEND_MESSAGE = "(//span[@aria-hidden='true' and text()='×'])[10]"
     POST_WAS_DELETED = "//h2[contains(text(), 'Inzerát byl odstraněn')]"
-    FLAT_HEADER = "//h1[@class='heading__title mb-4 mb-md-1']"
-    FLAT_DESCRIPTION = "//p[@class='b-desc__info']"
-    ADD = "//div[@id='collapse_text']"
-    maximum_price_of_flat = "17"
-    reality_username = "bersh92@gmail.com"
-    reality_password = "bersh06061989"
-
+    maximum_price_of_flat = "16"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
     UserNameInputField = 'div[role="dialog"] input[id="username"]'
@@ -40,6 +22,12 @@ class RealitkaHelper:
     ID_NUMBER_OF_THE_FLAT = "section.box.Section_section___TusU.section.mb-5.mb-lg-10 > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td"
     LoadingSpinner = 'div[class="spinner-border text-green"]'
     SuccessLogInMessage = "//div[contains(text(), 'Přihlášení proběhlo úspěšně')]"
+    ContactOwnerButton = '//div[@class="box d-none d-md-block"]//button[contains(text(), "Kontaktovat majitele")]'
+    MessageInputField = 'textarea[id="message"]'
+    SendMessageButton = '//button[contains(text(), "Poslat zprávu")]'
+    SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
+    CloseMessageWindow = 'button[aria-label="Zavřít"]'
+    TextToSend = "Dobry den,\n\nVelmi mně zaujala vase nabídka nemovitosti, Ja by chtěl přijet na prohlídku, a připadne tenhle byt pronajmout. Par slov o nás, my jsme manželé, původem z Ukrajiny, v Praze žijeme už 10 let nekoukací a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem na 2 a vice let, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nam 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525\n\nS pozdravem\nOleksandr Korsun"
 
     def __init__(self, app):
         self.app = app
@@ -70,8 +58,8 @@ class RealitkaHelper:
                 self.click_on_dog_button_and_load_flats()
             elif float(self.step.get_element_text(self.PRICE_OF_THE_FLAT).split(' ')[0]) <= float(self.maximum_price_of_flat):
                 if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
+                    self.send_message_to_owner(self.TextToSend)
                     self.db_id.insert_one({"id": self.get_flat_description_id()})
-                    # self.send_message_to_owner('message')
                     self.telegramBot.send_message(248932976, str(self.wd.current_url))
                 self.click_on_dog_button_and_load_flats()
             else:
@@ -96,10 +84,6 @@ class RealitkaHelper:
         result = self.step.get_element_text(self.ID_NUMBER_OF_THE_FLAT)
         return result
 
-    def hide_add(self):
-        if self.step.is_element_present(self.ADD, time=1) == True:
-            self.step.click_on_element(self.ADD)
-
     def check_flat_price(self):
         price = self.step.get_element_text(self.PRICE_OF_THE_FLAT)
         if "+" in price:
@@ -109,3 +93,13 @@ class RealitkaHelper:
             price_new = price.split(' ')
             actual_price = float(price_new[0])
         return actual_price
+
+    def send_message_to_owner(self, text):
+        self.step.click_on_element(self.ContactOwnerButton, scrollInToView=True)
+        time.sleep(2)
+        self.step.input_text(self.MessageInputField, text)
+        self.step.click_on_element(self.SendMessageButton, scrollInToView=True)
+        time.sleep(1)
+        self.step.is_element_present(self.SuccessMessageText, time=5)
+        self.step.click_on_element(self.CloseMessageWindow, scrollInToView=True)
+        time.sleep(1)
