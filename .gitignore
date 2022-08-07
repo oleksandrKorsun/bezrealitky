@@ -2,3 +2,4 @@
 *.iml
 .idea/*
 test/.pytest_cache/**
+.pytest_cache/**
