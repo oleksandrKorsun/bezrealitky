@@ -1,12 +1,12 @@
 import time
 
-from helpers.csvHelper import CsvHelper
+from helpers.dbHelper import DbHelper
 from helpers.telegramBotHelper import TelegramBotHelper
 
 
 class RealitkaHelper:
-    csvFile = CsvHelper("file_with_flats.txt")
     telegramBot = TelegramBotHelper()
+    db_id = DbHelper("FLATS", "list_of_sent_ids")
 
     FIRST_CHECK_BOX = "(//span[@class='custom-control-indicator'])[3]"
     SECOND_CHECK_BOX = "(//span[@class='custom-control-indicator'])[4]"
@@ -69,15 +69,15 @@ class RealitkaHelper:
             if self.step.is_element_present(self.POST_WAS_DELETED, time=1) == True:
                 self.click_on_dog_button_and_load_flats()
             elif float(self.step.get_element_text(self.PRICE_OF_THE_FLAT).split(' ')[0]) <= float(self.maximum_price_of_flat):
-                if self.csvFile.check_if_element_in_csv(self.get_flat_description_id()) == False:
-                    self.csvFile.write_to_csv(self.get_flat_description_id())
-                    self.csvFile.write_to_csv('\n')
+                if self.db_id.check_value_in_db({"id": [self.get_flat_description_id()]}) == False:
+                    self.db_id.insert_one({"id": [self.get_flat_description_id()]})
                     # self.send_message_to_owner('message')
                     self.telegramBot.send_message(248932976, str(self.wd.current_url))
                 self.click_on_dog_button_and_load_flats()
             else:
                 self.click_on_dog_button_and_load_flats()
             list_of_elements = list_of_elements - 1
+        self.db_id.close_connection()
 
     def click_on_dog_button_and_load_flats(self):
         self.step.click_on_element(self.DOG_BUTTON)
