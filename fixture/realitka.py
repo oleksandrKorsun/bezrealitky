@@ -69,8 +69,8 @@ class RealitkaHelper:
             if self.step.is_element_present(self.POST_WAS_DELETED, time=1) == True:
                 self.click_on_dog_button_and_load_flats()
             elif float(self.step.get_element_text(self.PRICE_OF_THE_FLAT).split(' ')[0]) <= float(self.maximum_price_of_flat):
-                if self.db_id.check_value_in_db({"id": [self.get_flat_description_id()]}) == False:
-                    self.db_id.insert_one({"id": [self.get_flat_description_id()]})
+                if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
+                    self.db_id.insert_one({"id": self.get_flat_description_id()})
                     # self.send_message_to_owner('message')
                     self.telegramBot.send_message(248932976, str(self.wd.current_url))
                 self.click_on_dog_button_and_load_flats()
