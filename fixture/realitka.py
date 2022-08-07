@@ -39,8 +39,6 @@ class RealitkaHelper:
     LoadingSpinner = 'div[class="spinner-border text-green"]'
     SuccessLogInMessage = "//div[contains(text(), 'Přihlášení proběhlo úspěšně')]"
 
-
-
     def __init__(self, app):
         self.app = app
         self.step = self.app.step
@@ -61,6 +59,9 @@ class RealitkaHelper:
     def find_flats(self):
         list_of_elements = len(self.step.get_list_of_elements(self.LIST_OF_FLATS))
         for element in range(list_of_elements):
+            self.wd.execute_script(
+                "arguments[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });", self.step.get_list_of_elements(self.LIST_OF_FLATS)[element])
+            time.sleep(2)
             self.step.get_list_of_elements(self.LIST_OF_FLATS)[element].click()
             self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
             if self.step.is_element_present(self.POST_WAS_DELETED, time=1) == True:
@@ -85,7 +86,7 @@ class RealitkaHelper:
         time.sleep(1)
         if self.step.is_element_present(self.NacistDalsiButton, time=1) == True:
             while self.step.is_element_present(self.NacistDalsiButton, time=1) == True:
-                self.step.click_on_element(self.NacistDalsiButton, scrollInToView = True)
+                self.step.click_on_element(self.NacistDalsiButton, scrollInToView=True)
                 time.sleep(1)
 
     def get_flat_description_id(self):
