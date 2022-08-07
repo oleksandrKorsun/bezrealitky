@@ -5,7 +5,7 @@ from helpers.telegramBotHelper import TelegramBotHelper
 
 
 class RealitkaHelper:
-    csvFile = CsvHelper("file_with_flats.csv")
+    csvFile = CsvHelper("file_with_flats.txt")
     telegramBot = TelegramBotHelper()
 
     FIRST_CHECK_BOX = "(//span[@class='custom-control-indicator'])[3]"
