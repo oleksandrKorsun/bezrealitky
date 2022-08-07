@@ -1,10 +1,12 @@
 import time
 
 from helpers.csvHelper import CsvHelper
+from helpers.telegramBotHelper import TelegramBotHelper
 
 
 class RealitkaHelper:
     csvFile = CsvHelper("file_with_flats.csv")
+    telegramBot = TelegramBotHelper()
 
     FIRST_CHECK_BOX = "(//span[@class='custom-control-indicator'])[3]"
     SECOND_CHECK_BOX = "(//span[@class='custom-control-indicator'])[4]"
@@ -71,6 +73,7 @@ class RealitkaHelper:
                     self.csvFile.write_to_csv(self.get_flat_description_id())
                     self.csvFile.write_to_csv('\n')
                     # self.send_message_to_owner('message')
+                    self.telegramBot.send_message(248932976, str(self.wd.current_url))
                 self.click_on_dog_button_and_load_flats()
             else:
                 self.click_on_dog_button_and_load_flats()
