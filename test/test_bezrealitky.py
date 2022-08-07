@@ -7,6 +7,7 @@ def test_bezrealitky(app):
     app.realitka.click_on_dog_button_and_load_flats()
     app.realitka.find_flats()
     print('end')
+    sys.stdout.flush()
 
 # def test_bezrealitky(app):
 #     try:
