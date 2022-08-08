@@ -27,7 +27,7 @@ class RealitkaHelper:
     SendMessageButton = '//button[contains(text(), "Poslat zprávu")]'
     SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
-    TextToSend = "Dobry den,\n\nVelmi mně zaujala vase nabídka nemovitosti, Ja by chtěl přijet na prohlídku, a připadne tenhle byt pronajmout. Par slov o nás, my jsme manželé, původem z Ukrajiny, v Praze žijeme už 10 let nekoukací a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem na 2 a vice let, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nam 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525\n\nS pozdravem\nOleksandr Korsun"
+    TextToSend = "Dobry den,\n\nVelmi mně zaujala vase nabídka nemovitosti, Ja by chtěl přijet na prohlídku, a připadne tenhle byt pronajmout. Par slov o nás, my jsme manželé, původem z Ukrajiny, v Praze žijeme už 10 let nekoukací a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem na 2 a vice let, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nam 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
 
     def __init__(self, app):
         self.app = app
