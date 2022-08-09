@@ -3,11 +3,11 @@ from helpers.telegramBotHelper import TelegramBotHelper
 telegramBot = TelegramBotHelper()
 
 
-def test_bezrealitky(app):
+
+def test_check_new_messages(app):
     try:
         app.realitka.openUrl("https://www.bezrealitky.cz/moje-bezrealitky/hlidaci-pes")
         app.realitka.logIn('bersh92@gmail.com','xuWveLiU4@Tivy9')
-        app.realitka.click_on_dog_button_and_load_flats()
-        app.realitka.find_flats()
+        app.check_if_new_messages_present()
     except:
-        telegramBot.send_message(248932976, '!!! ERROR test_bezrealitky WAS FAILED !!!')
+        telegramBot.send_message(248932976, '!!! ERROR test_check_new_messages WAS FAILED !!!')

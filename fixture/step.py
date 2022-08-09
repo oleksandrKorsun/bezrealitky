@@ -24,7 +24,7 @@ class StepHelper:
             how = By.CSS_SELECTOR
         return how
 
-    def is_element_present(self, locator, time=3):
+    def specified_element_is_present(self, locator, time=3):
         try:
             WebDriverWait(self.wd, time).until(
                 EC.presence_of_element_located((self.get_how(locator), locator)))

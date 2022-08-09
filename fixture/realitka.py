@@ -8,7 +8,10 @@ class RealitkaHelper:
     telegramBot = TelegramBotHelper()
     db_id = DbHelper("FLATS", "list_of_sent_ids")
 
-    POST_WAS_DELETED = "//h2[contains(text(), 'Inzerát byl odstraněn')]"
+    NewMessageIcon = "//span[text()='nepřečtené']"
+    MyAccountIconButton = 'MyAccountIconButton = div[class^="d-none d-md"] img[alt="Oleksandr Korsun"]'
+    NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
+    PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     maximum_price_of_flat = "16"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
@@ -43,40 +46,46 @@ class RealitkaHelper:
         self.step.input_text(self.UserNameInputField, username)
         self.step.input_text(self.PasswordInputField, password)
         self.step.click_on_element(self.LogInButton)
-        time.sleep(2)
-        self.step.specified_element_is_not_present(self.SuccessLogInMessage, 5)
+        self.step.specified_element_is_present(self.SuccessLogInMessage, 5)
+        time.sleep(1)
 
     def find_flats(self):
-        list_of_elements = len(self.step.get_list_of_elements(self.LIST_OF_FLATS))
-        for element in range(list_of_elements):
-            self.wd.execute_script(
-                "arguments[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });", self.step.get_list_of_elements(self.LIST_OF_FLATS)[element])
-            time.sleep(2)
-            self.step.get_list_of_elements(self.LIST_OF_FLATS)[element].click()
-            self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
-            if self.step.is_element_present(self.POST_WAS_DELETED, time=1) == True:
-                self.click_on_dog_button_and_load_flats()
-            elif float(self.step.get_element_text(self.PRICE_OF_THE_FLAT).split(' ')[0]) <= float(self.maximum_price_of_flat):
-                if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
-                    self.send_message_to_owner(self.TextToSend)
-                    self.db_id.insert_one({"id": self.get_flat_description_id()})
-                    self.telegramBot.send_message(248932976, str(self.wd.current_url))
-                self.click_on_dog_button_and_load_flats()
-            else:
-                self.click_on_dog_button_and_load_flats()
-            list_of_elements = list_of_elements - 1
-        self.db_id.close_connection()
+        if self.step.specified_element_is_present(self.NoItemsFoundMessage, time=2) == False:
+            list_of_elements = len(self.step.get_list_of_elements(self.LIST_OF_FLATS))
+            for element in range(list_of_elements):
+                self.wd.execute_script(
+                    "arguments[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });", self.step.get_list_of_elements(self.LIST_OF_FLATS)[element])
+                time.sleep(2)
+                self.step.get_list_of_elements(self.LIST_OF_FLATS)[element].click()
+                self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
+                if self.step.specified_element_is_present(self.PostIsNotAvailable, time=1) == True:
+                    self.click_on_dog_button_and_load_flats()
+                elif float(self.step.get_element_text(self.PRICE_OF_THE_FLAT).split(' ')[0]) <= float(self.maximum_price_of_flat):
+                    if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
+                        self.send_message_to_owner(self.TextToSend)
+                        self.db_id.insert_one({"id": self.get_flat_description_id()})
+                        self.telegramBot.send_message(248932976, str(self.wd.current_url))
+                    self.click_on_dog_button_and_load_flats()
+                else:
+                    self.click_on_dog_button_and_load_flats()
+                list_of_elements = list_of_elements - 1
+            self.db_id.close_connection()
 
     def click_on_dog_button_and_load_flats(self):
         self.step.click_on_element(self.DOG_BUTTON)
         self.load_all_flats_list()
 
+    def check_if_new_messages_present(self):
+        self.step.click_on_element(self.MyAccountIconButton)
+        if self.step.specified_element_is_present(self.NewMessageIcon, time=4) == True:
+            self.telegramBot.send_message(248932976, "!!! You Received a new message !!!")
+
     def load_all_flats_list(self):
         time.sleep(1)
         self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
         time.sleep(1)
-        if self.step.is_element_present(self.NacistDalsiButton, time=1) == True:
-            while self.step.is_element_present(self.NacistDalsiButton, time=1) == True:
+        if self.step.specified_element_is_present(self.NacistDalsiButton, time=1) == True:
+            while self.step.specified_element_is_present(self.NacistDalsiButton, time=1) == True:
                 self.step.click_on_element(self.NacistDalsiButton, scrollInToView=True)
                 time.sleep(1)
 
@@ -100,6 +109,6 @@ class RealitkaHelper:
         self.step.input_text(self.MessageInputField, text)
         self.step.click_on_element(self.SendMessageButton, scrollInToView=True)
         time.sleep(1)
-        self.step.is_element_present(self.SuccessMessageText, time=5)
+        self.step.specified_element_is_present(self.SuccessMessageText, time=5)
         self.step.click_on_element(self.CloseMessageWindow, scrollInToView=True)
         time.sleep(1)
