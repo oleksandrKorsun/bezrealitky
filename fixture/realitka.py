@@ -9,7 +9,7 @@ class RealitkaHelper:
     db_id = DbHelper("FLATS", "list_of_sent_ids")
 
     NewMessageIcon = "//span[text()='nepřečtené']"
-    MyAccountIconButton = 'MyAccountIconButton = div[class^="d-none d-md"] img[alt="Oleksandr Korsun"]'
+    MyAccountIconButton = 'div[class^="d-none d-md"] img[alt="Oleksandr Korsun"]'
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     maximum_price_of_flat = "16"
