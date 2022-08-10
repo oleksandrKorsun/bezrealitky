@@ -47,7 +47,7 @@ class RealitkaHelper:
         self.step.input_text(self.PasswordInputField, password)
         self.step.click_on_element(self.LogInButton)
         self.step.specified_element_is_present(self.SuccessLogInMessage, 5)
-        time.sleep(1)
+        time.sleep(2)
 
     def find_flats(self):
         if self.step.specified_element_is_present(self.NoItemsFoundMessage, time=2) == False:
