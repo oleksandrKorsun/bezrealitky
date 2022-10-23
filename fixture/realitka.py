@@ -78,7 +78,7 @@ class RealitkaHelper:
     def check_if_new_messages_present(self):
         self.step.click_on_element(self.MyAccountIconButton)
         if self.step.specified_element_is_present(self.NewMessageIcon, time=4) == True:
-            self.telegramBot.send_message(248932976, "!!! You Received a new message !!!")
+            self.telegramBot.send_message(-877986264, "!!! You Received a new message !!!")
 
     def load_all_flats_list(self):
         time.sleep(1)
