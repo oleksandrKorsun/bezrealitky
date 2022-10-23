@@ -15,9 +15,9 @@ class RealitkaHelper:
     maximum_price_of_flat = "16"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
-    UserNameInputField = 'div[role="dialog"] input[id="username"]'
-    PasswordInputField = 'div[role="dialog"] div[class="input-group"] input[id="password"]'
-    LogInButton = 'div[role="dialog"] button[type="submit"]'
+    UserNameInputField = '#username'
+    PasswordInputField = '#password'
+    LogInButton = 'button[type="submit"]'
     NacistDalsiButton = "//button[contains(text(), 'Načíst další')]"
     LIST_OF_FLATS = "article[class^='PropertyCard_propertyCard']"
     PRICE_OF_THE_FLAT = 'div[class="col-xxl-5 col-lg-6 col-md-7"] strong[class="h4 fw-bold"]'
@@ -30,7 +30,7 @@ class RealitkaHelper:
     SendMessageButton = '//button[contains(text(), "Poslat zprávu")]'
     SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
-    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme manželé, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem na 2 a vice let, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
+    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme bratr a sestra, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
 
     def __init__(self, app):
         self.app = app
@@ -42,7 +42,7 @@ class RealitkaHelper:
 
     def logIn(self, username, password):
         self.step.click_on_element(self.AcceptCookiesButton)
-        self.step.get_list_of_elements(self.LogInAndMenuButtons)[0].click()
+        # self.step.get_list_of_elements(self.LogInAndMenuButtons)[0].click()
         self.step.input_text(self.UserNameInputField, username)
         self.step.input_text(self.PasswordInputField, password)
         self.step.click_on_element(self.LogInButton)
@@ -64,7 +64,7 @@ class RealitkaHelper:
                     if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
                         self.send_message_to_owner(self.TextToSend)
                         self.db_id.insert_one({"id": self.get_flat_description_id()})
-                        self.telegramBot.send_message(248932976, str(self.wd.current_url))
+                        self.telegramBot.send_message(-877986264, str(self.wd.current_url))
                     self.click_on_dog_button_and_load_flats()
                 else:
                     self.click_on_dog_button_and_load_flats()
