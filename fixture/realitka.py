@@ -9,7 +9,7 @@ class RealitkaHelper:
     db_id = DbHelper("FLATS", "list_of_sent_ids")
 
     NewMessageIcon = "//span[text()='nepřečtené']"
-    MyAccountIconButton = 'div[class^="d-none d-md"] img[alt="Oleksandr Korsun"]'
+    MyAccountIconButton = 'img[alt="Oleksandr Korsun"]'
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     maximum_price_of_flat = "16"
@@ -78,7 +78,7 @@ class RealitkaHelper:
     def check_if_new_messages_present(self):
         self.step.click_on_element(self.MyAccountIconButton)
         if self.step.specified_element_is_present(self.NewMessageIcon, time=4) == True:
-            self.telegramBot.send_message(-877986264, "!!! You Received a new message !!!")
+            self.telegramBot.send_message(248932976, "!!! You Received a new message !!!")
 
     def load_all_flats_list(self):
         time.sleep(1)
