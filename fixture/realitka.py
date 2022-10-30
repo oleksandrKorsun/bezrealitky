@@ -12,7 +12,7 @@ class RealitkaHelper:
     MyAccountIconButton = 'img[alt="Oleksandr Korsun"]'
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
-    maximum_price_of_flat = "18"
+    maximum_price_of_flat = "19"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
     UserNameInputField = '#username'
