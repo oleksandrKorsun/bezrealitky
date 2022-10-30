@@ -12,7 +12,7 @@ class RealitkaHelper:
     MyAccountIconButton = 'img[alt="Oleksandr Korsun"]'
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
-    maximum_price_of_flat = "16"
+    maximum_price_of_flat = "18"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
     UserNameInputField = '#username'
@@ -30,7 +30,7 @@ class RealitkaHelper:
     SendMessageButton = '//button[contains(text(), "Poslat zprávu")]'
     SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
-    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme bratr a sestra, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
+    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme par, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
 
     def __init__(self, app):
         self.app = app
