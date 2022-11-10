@@ -12,6 +12,7 @@ class RealitkaHelper:
     MyAccountIconButton = 'img[alt="Oleksandr Korsun"]'
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
+    StranceChybiStrechaText = "//h1[contains(text(), 'Téhle stránce chybí střecha nad hlavou')]"
     maximum_price_of_flat = "19"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
@@ -58,7 +59,7 @@ class RealitkaHelper:
                 time.sleep(2)
                 self.step.get_list_of_elements(self.LIST_OF_FLATS)[element].click()
                 self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
-                if self.step.specified_element_is_present(self.PostIsNotAvailable, time=1) == True:
+                if self.step.specified_element_is_present(self.PostIsNotAvailable, time=1) == True or self.step.specified_element_is_present(self.StranceChybiStrechaText, time=1) == True:
                     self.click_on_dog_button_and_load_flats()
                 elif float(self.step.get_element_text(self.PRICE_OF_THE_FLAT).split(' ')[0]) <= float(self.maximum_price_of_flat):
                     if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
