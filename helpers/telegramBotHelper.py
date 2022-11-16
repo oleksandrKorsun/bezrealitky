@@ -16,6 +16,9 @@ class TelegramBotHelper:
         updates = self.bot.get_updates()[object_index].message.chat_id
         return updates
 
+    def send_photo(self, chat_id: int, photo):
+        self.bot.send_photo(chat_id, photo)
+
     def send_message(self, chat_id: int, message):
         try:
             self.bot.sendMessage(chat_id=chat_id, text=message)

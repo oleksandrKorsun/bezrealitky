@@ -31,6 +31,8 @@ class RealitkaHelper:
     SendMessageButton = '//button[contains(text(), "Poslat zprávu")]'
     SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
+    zpravyButton = "//span[text()='Zprávy']"
+    listOfNewMessages = 'span[class="MessagePreview_messagePreviewStatus__p_UVW undefined bg-primary"]'
     TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme par, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
 
     def __init__(self, app):
@@ -78,8 +80,12 @@ class RealitkaHelper:
 
     def check_if_new_messages_present(self):
         self.step.click_on_element(self.MyAccountIconButton)
-        if self.step.specified_element_is_present(self.NewMessageIcon, time=4) == True:
-            self.telegramBot.send_message(248932976, "!!! You Received a new message !!!")
+        self.step.click_on_element(self.zpravyButton)
+        self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
+        time.sleep(1)
+        if self.step.specified_element_is_present(self.listOfNewMessages, time=4) == True:
+            number = len(self.step.get_list_of_elements(self.listOfNewMessages))
+            self.telegramBot.send_message(-877986264, "!!! You Received " + str(number) + " new messages !!!")
 
     def load_all_flats_list(self):
         time.sleep(1)
