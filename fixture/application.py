@@ -5,6 +5,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from fixture.realitka import RealitkaHelper
 from fixture.step import StepHelper
+from helpers.utils import Utils
+
 
 class Application:
 
@@ -23,6 +25,7 @@ class Application:
 
         self.step = StepHelper(self)
         self.realitka = RealitkaHelper(self)
+        self.utils = Utils(self)
 
     def destroy(self):
         self.wd.quit()

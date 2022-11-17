@@ -11,4 +11,6 @@ def test_bezrealitky(app):
         app.realitka.find_flats()
     except:
         telegramBot.send_message(248932976, '!!! ERROR test_bezrealitky WAS FAILED !!!')
-        # telegramBot.send_photo(248932976, photo=open(app.wd.get_screenshot_as_png(), 'rb'))
+        app.utils.takeScreenshot()
+        telegramBot.send_photo(248932976, photo=open(app.utils.getPathToScreenshot(), 'rb'))
+        app.utils.deleteAllScreenshots()
