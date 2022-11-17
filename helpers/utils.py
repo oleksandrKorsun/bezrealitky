@@ -7,7 +7,7 @@ class Utils:
         self.step = self.app.step
         self.wd = self.app.wd
 
-    BASEDIR = os.path.join(os.path.abspath(os.pardir), "screenshots/")
+    BASEDIR = os.path.join(os.path.abspath(os.pardir), "screenshots")
 
     def takeScreenshot(self):
         self.wd.save_screenshot(self.BASEDIR + "test.png")
