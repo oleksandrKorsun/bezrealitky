@@ -1,4 +1,5 @@
 import os
+import shutil
 
 class Utils:
 
@@ -7,13 +8,14 @@ class Utils:
         self.step = self.app.step
         self.wd = self.app.wd
 
-    BASEDIR = os.path.join(os.path.abspath(os.pardir), "screenshots")
+    BASEDIR = os.path.join(os.path.abspath(os.pardir), "screenshots/")
 
     def takeScreenshot(self):
+        shutil.rmtree(self.BASEDIR)
+        os.makedirs(self.BASEDIR)
         self.wd.save_screenshot(self.BASEDIR + "test.png")
 
     def deleteAllScreenshots(self):
-        import shutil
         shutil.rmtree(self.BASEDIR)
         os.makedirs(self.BASEDIR)
 
