@@ -3,4 +3,4 @@ selenium==4.3.0
 pytest==7.1.2
 python-telegram-bot==13.13
 dnspython==2.2.1
-pymongo==4.2.0
+pymongo==4.3.3

@@ -1,10 +1,11 @@
+import certifi
 import pymongo
 
 class DbHelper():
 
     def __init__(self, db_name, collection_name):
         self.client = pymongo.MongoClient(
-            "mongodb+srv://bersh:testtest@cluster0.jvr3k.mongodb.net/?retryWrites=true&w=majority")
+            "mongodb+srv://bersh:testtest@cluster0.jvr3k.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())
         self.db = self.client[db_name][collection_name]
 
     def insert_many(self, list_of_objects):

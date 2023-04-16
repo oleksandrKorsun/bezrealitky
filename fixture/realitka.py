@@ -13,7 +13,7 @@ class RealitkaHelper:
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     StranceChybiStrechaText = "//h1[contains(text(), 'Téhle stránce chybí střecha nad hlavou')]"
-    maximum_price_of_flat = "19"
+    maximum_price_of_flat = "24000"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
     UserNameInputField = '#username'
@@ -21,19 +21,22 @@ class RealitkaHelper:
     LogInButton = 'button[type="submit"]'
     NacistDalsiButton = "//button[contains(text(), 'Načíst další')]"
     LIST_OF_FLATS = "article[class^='PropertyCard_propertyCard']"
-    PRICE_OF_THE_FLAT = 'div[class="col-xxl-5 col-lg-6 col-md-7"] strong[class="h4 fw-bold"]'
+    PRICE_OF_THE_FLAT = 'div[class*="StickyBox_stickyBox_"] strong[class="h4 fw-bold"]'
+    PRICE_OF_UTILITIES = 'div[class*="StickyBox_stickyBox_"] div[class="justify-content-between mb-2 row"] strong[class="text-body fw-bold"]'
+    PRICE_OF_DEPOSIT = 'div[class*="StickyBox_stickyBox_"] div[class="justify-content-between row"] strong[class="text-body fw-bold"]'
     DOG_BUTTON = "//span[contains(text(), 'Hlídací pes')]"
     ID_NUMBER_OF_THE_FLAT = "section.box.Section_section___TusU.section.mb-5.mb-lg-10 > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td"
     LoadingSpinner = 'div[class="spinner-border text-green"]'
     SuccessLogInMessage = "//div[contains(text(), 'Přihlášení proběhlo úspěšně')]"
-    ContactOwnerButton = '//div[@class="box d-none d-md-block"]//button[contains(text(), "Kontaktovat majitele")]'
+    ContactOwnerButton = '//div[@class="box mt-6 d-md-none"] //button[contains(text(), "Kontaktovat majitele")]'
     MessageInputField = 'textarea[id="message"]'
     SendMessageButton = '//button[contains(text(), "Poslat zprávu")]'
     SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
     zpravyButton = "//span[text()='Zprávy']"
     listOfNewMessages = 'span[class="MessagePreview_messagePreviewStatus__p_UVW undefined bg-primary"]'
-    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme par, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
+    TextToSend = "Dobry den"
+    TextToSend2 = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme par, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
 
     def __init__(self, app):
         self.app = app
@@ -63,7 +66,9 @@ class RealitkaHelper:
                 self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
                 if self.step.specified_element_is_present(self.PostIsNotAvailable, time=1) == True or self.step.specified_element_is_present(self.StranceChybiStrechaText, time=1) == True:
                     self.click_on_dog_button_and_load_flats()
-                elif float(self.step.get_element_text(self.PRICE_OF_THE_FLAT).split(' ')[0]) <= float(self.maximum_price_of_flat):
+                # price_of_flat = int(self.step.get_element_text(self.PRICE_OF_THE_FLAT).rsplit(' ', 1)[0].replace(" ", ""))
+                # price_of_utilities = int(self.step.get_element_text(self.PRICE_OF_UTILITIES).rsplit(' ', 1)[0].replace(" ", ""))
+                elif int(self.step.get_element_text(self.PRICE_OF_THE_FLAT).rsplit(' ', 1)[0].replace(" ", "")) + int(self.step.get_element_text(self.PRICE_OF_UTILITIES).rsplit(' ', 1)[0].replace(" ", "")) <= int(self.maximum_price_of_flat) and int(self.step.get_element_text(self.PRICE_OF_THE_FLAT).rsplit(' ', 1)[0].replace(" ", "")) == int(self.step.get_element_text(self.PRICE_OF_DEPOSIT).rsplit(' ', 1)[0].replace(" ", "")):
                     if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
                         self.send_message_to_owner(self.TextToSend)
                         self.db_id.insert_one({"id": self.get_flat_description_id()})
