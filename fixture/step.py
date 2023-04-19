@@ -75,3 +75,8 @@ class StepHelper:
         element = WebDriverWait(self.wd, 10).until(
             EC.visibility_of_element_located((self.get_how(locator), locator)))
         return element
+
+    def jsXpathClick (self, locator):
+        time.sleep(2)
+        b = self.wd.find_element(By.XPATH, locator)
+        self.wd.execute_script("arguments[0].click();", b)

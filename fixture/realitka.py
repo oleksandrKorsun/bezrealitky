@@ -5,6 +5,12 @@ from helpers.telegramBotHelper import TelegramBotHelper
 
 
 class RealitkaHelper:
+    price_of_flat = ''
+    price_of_utilities = ''
+    price_of_deposit = ''
+    maximum_deposit = ''
+    conditions = None
+
     telegramBot = TelegramBotHelper()
     db_id = DbHelper("FLATS", "list_of_sent_ids")
 
@@ -13,7 +19,7 @@ class RealitkaHelper:
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     StranceChybiStrechaText = "//h1[contains(text(), 'Téhle stránce chybí střecha nad hlavou')]"
-    maximum_price_of_flat = "24000"
+    maximum_price_of_flat = "15000"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
     UserNameInputField = '#username'
@@ -28,15 +34,14 @@ class RealitkaHelper:
     ID_NUMBER_OF_THE_FLAT = "section.box.Section_section___TusU.section.mb-5.mb-lg-10 > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td"
     LoadingSpinner = 'div[class="spinner-border text-green"]'
     SuccessLogInMessage = "//div[contains(text(), 'Přihlášení proběhlo úspěšně')]"
-    ContactOwnerButton = '//div[@class="box mt-6 d-md-none"] //button[contains(text(), "Kontaktovat majitele")]'
+    ContactOwnerButton = '//*[@id="__next"]/main/div[2]/section/div/div[1]/div[2]/div[1]/p/button'
     MessageInputField = 'textarea[id="message"]'
     SendMessageButton = '//button[contains(text(), "Poslat zprávu")]'
     SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
     zpravyButton = "//span[text()='Zprávy']"
     listOfNewMessages = 'span[class="MessagePreview_messagePreviewStatus__p_UVW undefined bg-primary"]'
-    TextToSend = "Dobry den"
-    TextToSend2 = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme par, původem z Ukrajiny, v Praze žijeme už 10 let nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pracujeme v IT, ja pracují na pozici asistenta viceprezidenta v oboru programování Pražského oddělení pro velkou mezinárodní banku (pokud by byla potřeba můžu to potvrdit potvrzením z práce). Je nám 30 let a 28 let. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nOleksandr Korsun"
+    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme par, původem z Ukrajiny, v Praze žijeme už dlouhodobe nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pacuji Programatorem v oboru IT. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nIvan Bedevelsky"
 
     def __init__(self, app):
         self.app = app
@@ -66,9 +71,16 @@ class RealitkaHelper:
                 self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
                 if self.step.specified_element_is_present(self.PostIsNotAvailable, time=1) == True or self.step.specified_element_is_present(self.StranceChybiStrechaText, time=1) == True:
                     self.click_on_dog_button_and_load_flats()
-                # price_of_flat = int(self.step.get_element_text(self.PRICE_OF_THE_FLAT).rsplit(' ', 1)[0].replace(" ", ""))
-                # price_of_utilities = int(self.step.get_element_text(self.PRICE_OF_UTILITIES).rsplit(' ', 1)[0].replace(" ", ""))
-                elif int(self.step.get_element_text(self.PRICE_OF_THE_FLAT).rsplit(' ', 1)[0].replace(" ", "")) + int(self.step.get_element_text(self.PRICE_OF_UTILITIES).rsplit(' ', 1)[0].replace(" ", "")) <= int(self.maximum_price_of_flat) and int(self.step.get_element_text(self.PRICE_OF_THE_FLAT).rsplit(' ', 1)[0].replace(" ", "")) == int(self.step.get_element_text(self.PRICE_OF_DEPOSIT).rsplit(' ', 1)[0].replace(" ", "")):
+                try:
+                    self.price_of_flat = int(self.step.get_element_text(self.PRICE_OF_THE_FLAT).rsplit(' ', 1)[0].replace(" ", ""))
+                    self.price_of_utilities = int(self.step.get_element_text(self.PRICE_OF_UTILITIES).rsplit(' ', 1)[0].replace(" ", ""))
+                    self.price_of_deposit = int(self.step.get_element_text(self.PRICE_OF_DEPOSIT).rsplit(' ', 1)[0].replace(" ", ""))
+                    self.maximum_deposit = int( self.price_of_flat / 2 + self.price_of_flat)
+                    if self.price_of_flat + self.price_of_utilities <= int(self.maximum_price_of_flat) and self.price_of_deposit <= self.maximum_deposit:
+                        self.conditions = True
+                except:
+                    self.click_on_dog_button_and_load_flats()
+                if self.conditions:
                     if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
                         self.send_message_to_owner(self.TextToSend)
                         self.db_id.insert_one({"id": self.get_flat_description_id()})
@@ -116,7 +128,7 @@ class RealitkaHelper:
         return actual_price
 
     def send_message_to_owner(self, text):
-        self.step.click_on_element(self.ContactOwnerButton, scrollInToView=True)
+        self.step.jsXpathClick(self.ContactOwnerButton)
         time.sleep(2)
         self.step.input_text(self.MessageInputField, text)
         self.step.click_on_element(self.SendMessageButton, scrollInToView=True)
