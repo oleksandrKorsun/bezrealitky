@@ -9,8 +9,9 @@ def test_bezrealitky(app):
         app.realitka.logIn('ivan.bedevelsky92@seznam.cz', 'ivan06061989')
         app.realitka.click_on_dog_button_and_load_flats()
         app.realitka.find_flats()
-    except:
+    except Exception as e:
         telegramBot.send_message(248932976, '!!! ERROR test_bezrealitky WAS FAILED !!!')
         app.utils.takeScreenshot()
         telegramBot.send_photo(248932976, photo=open(app.utils.getPathToScreenshot(), 'rb'))
         app.utils.deleteAllScreenshots()
+        raise e
