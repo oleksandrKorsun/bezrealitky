@@ -64,6 +64,7 @@ class RealitkaHelper:
         if self.step.specified_element_is_present(self.NoItemsFoundMessage, time=2) == False:
             list_of_elements = len(self.step.get_list_of_elements(self.LIST_OF_FLATS))
             for element in range(list_of_elements):
+                self.conditions = None
                 self.wd.execute_script(
                     "arguments[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });", self.step.get_list_of_elements(self.LIST_OF_FLATS)[element])
                 time.sleep(2)
