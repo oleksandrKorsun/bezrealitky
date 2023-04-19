@@ -15,7 +15,7 @@ class RealitkaHelper:
     db_id = DbHelper("FLATS", "list_of_sent_ids")
 
     NewMessageIcon = "//span[text()='nepřečtené']"
-    MyAccountIconButton = 'img[alt="Oleksandr Korsun"]'
+    MyAccountIconButton = 'div [role="toolbar"] span[class*="Avatar_avatar"]'
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     StranceChybiStrechaText = "//h1[contains(text(), 'Téhle stránce chybí střecha nad hlavou')]"
