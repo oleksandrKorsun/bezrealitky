@@ -41,7 +41,7 @@ class RealitkaHelper:
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
     zpravyButton = "//span[text()='Zprávy']"
     listOfNewMessages = 'span[class="MessagePreview_messagePreviewStatus__p_UVW undefined bg-primary"]'
-    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Par slov o nás, jsme par, původem z Ukrajiny, v Praze žijeme už dlouhodobe nekuřáci a nemáme domácí zvířata. Hledáme byt pro dlouhodobý pronájem, pacuji Programatorem v oboru IT. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nIvan Bedevelsky"
+    TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Pár slov o mně, jsem původem z Ukrajiny, v Praze žiju už dlouhodobe, jsem nekuřák a nemám domácí zvířata. Hledám byt pro dlouhodobý pronájem, pacuji Programatorem v oboru IT. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nIvan Bedevelsky"
 
     def __init__(self, app):
         self.app = app
