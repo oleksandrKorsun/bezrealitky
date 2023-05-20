@@ -19,7 +19,7 @@ class RealitkaHelper:
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     StranceChybiStrechaText = "//h1[contains(text(), 'Téhle stránce chybí střecha nad hlavou')]"
-    maximum_price_of_flat = "15000"
+    maximum_price_of_flat = "15500"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
     UserNameInputField = '#username'
@@ -40,7 +40,7 @@ class RealitkaHelper:
     SuccessMessageText = '//h3[contains(text(), "Vaše zpráva byla úspěšně odeslána!")]'
     CloseMessageWindow = 'button[aria-label="Zavřít"]'
     zpravyButton = "//span[text()='Zprávy']"
-    listOfNewMessages = 'span[class="MessagePreview_messagePreviewStatus__p_UVW undefined bg-primary"]'
+    newMessageIcon = 'span[class="Badge_badge__YL9Gr Badge_badge--lg__vTcCz badge bg-primary"]'
     TextToSend = "Dobry den,\n\nVelmi mně zaujala vaše nabídka nemovitosti, Rád bych přijet na prohlídku, a připadne tenhle byt chtěl pronajmout. Pár slov o mně, jsem původem z Ukrajiny, v Praze žiju už dlouhodobe, jsem nekuřák a nemám domácí zvířata. Hledám byt pro dlouhodobý pronájem, pacuji Programatorem v oboru IT. Prosím o zpětnou vazbu ohledně prohlídky. Tel. Číslo: 770-677-525.\n\nS pozdravem\nIvan Bedevelsky"
 
     def __init__(self, app):
@@ -98,12 +98,10 @@ class RealitkaHelper:
 
     def check_if_new_messages_present(self):
         self.step.click_on_element(self.MyAccountIconButton)
-        self.step.click_on_element(self.zpravyButton)
         self.step.specified_element_is_not_present(self.LoadingSpinner, 5)
         time.sleep(1)
-        if self.step.specified_element_is_present(self.listOfNewMessages, time=4) == True:
-            number = len(self.step.get_list_of_elements(self.listOfNewMessages))
-            self.telegramBot.send_message(-877986264, "!!! You Received " + str(number) + " new messages !!!")
+        if self.step.specified_element_is_present(self.newMessageIcon, time=4) == True:
+            self.telegramBot.send_message(-877986264, "!!! You Received a new message !!!")
 
     def load_all_flats_list(self):
         time.sleep(1)
