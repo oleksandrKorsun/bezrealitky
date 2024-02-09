@@ -19,18 +19,18 @@ class RealitkaHelper:
     NoItemsFoundMessage = "//p[contains(text(), 'Tomuto hledání neodpovídají žádné inzeráty')]"
     PostIsNotAvailable = "//h1[contains(text(), 'Inzerát již není v nabídce')]"
     StranceChybiStrechaText = "//h1[contains(text(), 'Téhle stránce chybí střecha nad hlavou')]"
-    maximum_price_of_flat = "15500"
+    maximum_price_of_flat = "50000"
     AcceptCookiesButton = 'button[id="CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"]'
     LogInAndMenuButtons = 'div[class="d-none d-md-inline-flex btn-group"] button[class="Header_headerButton__yH0rH btn-sm btn btn-outline-dark"]'
     UserNameInputField = '#username'
     PasswordInputField = '#password'
     LogInButton = 'button[type="submit"]'
-    NacistDalsiButton = "//button[contains(text(), 'Načíst další')]"
+    NacistDalsiButton = "//span[contains(text(), 'Načíst další')]"
     LIST_OF_FLATS = "article[class^='PropertyCard_propertyCard']"
     PRICE_OF_THE_FLAT = 'div[class*="StickyBox_stickyBox_"] strong[class="h4 fw-bold"]'
     PRICE_OF_UTILITIES = 'div[class*="StickyBox_stickyBox_"] div[class="justify-content-between mb-2 row"] strong[class="text-body fw-bold"]'
     PRICE_OF_DEPOSIT = 'div[class*="StickyBox_stickyBox_"] div[class="justify-content-between row"] strong[class="text-body fw-bold"]'
-    DOG_BUTTON = "//span[contains(text(), 'Hlídací pes')]"
+    DOG_BUTTON = "//a[contains(@href, 'hlidaci-pes')]/button"
     ID_NUMBER_OF_THE_FLAT = "section.box.Section_section___TusU.section.mb-5.mb-lg-10 > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td"
     LoadingSpinner = 'div[class="spinner-border text-green"]'
     SuccessLogInMessage = "//div[contains(text(), 'Přihlášení proběhlo úspěšně')]"
@@ -82,9 +82,9 @@ class RealitkaHelper:
                 except:
                     self.click_on_dog_button_and_load_flats()
                 if self.conditions:
-                    if self.db_id.check_value_in_db({"id": self.get_flat_description_id()}) == False:
+                    if self.db_id.check_value_in_db({"id": self.get_flat_id_from_url()}) == False:
                         self.send_message_to_owner(self.TextToSend)
-                        self.db_id.insert_one({"id": self.get_flat_description_id()})
+                        self.db_id.insert_one({"id": self.get_flat_id_from_url()})
                         self.telegramBot.send_message(-877986264, str(self.wd.current_url))
                     self.click_on_dog_button_and_load_flats()
                 else:
@@ -112,9 +112,15 @@ class RealitkaHelper:
                 self.step.click_on_element(self.NacistDalsiButton, scrollInToView=True)
                 time.sleep(1)
 
-    def get_flat_description_id(self):
-        result = self.step.get_element_text(self.ID_NUMBER_OF_THE_FLAT)
-        return result
+    def get_flat_id_from_url(self):
+        url = self.wd.current_url
+        url_parts = url.split('/')
+        last_part = url_parts[-1] if url_parts else ''
+        potential_id = last_part.split('-')[0] if '-' in last_part else None
+        if potential_id and potential_id.isdigit():
+            return potential_id
+        else:
+            return None
 
     def check_flat_price(self):
         price = self.step.get_element_text(self.PRICE_OF_THE_FLAT)
